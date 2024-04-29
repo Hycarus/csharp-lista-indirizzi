@@ -2,6 +2,15 @@
 
 class Program
 {
+
+    // BONUS POMERIDIANO
+
+    static char[,] board = new char[3, 3];
+    static char currentPlayer = 'A';
+
+    //
+
+
     static void Main(string[] args)
     {
         string path = "/Users/mirko/boolean/DotNet/csharp-lista-indirizzi/addresses.csv";
@@ -12,6 +21,33 @@ class Program
             Console.WriteLine($"Ecco l'indirizzo {indirizzo}");
         }
         ScriviInTesto(indirizzi, path2);
+
+        // BONUS POMERIDIANO
+
+        CreateBoard();
+        bool IsGameWon = false;
+
+        while (!IsGameWon && !IsBoardFull())
+        {
+            PrintBoard();
+            PlayerMove();
+            IsGameWon = CheckWin();
+            SwitchPlayer();
+        }
+
+        PrintBoard();
+
+        if (IsGameWon)
+        {
+            SwitchPlayer();
+            Console.WriteLine($"Giocatore {currentPlayer} ha vinto!");
+        }
+        else
+        {
+            Console.WriteLine("La partita finisce in parità");
+        }
+
+        //
     }
 
     public static List<Indirizzo> LeggiDaTesto(string path)
@@ -62,11 +98,131 @@ class Program
         return indirizzi;
     }
 
+    // Bonus
+
     public static void ScriviInTesto(List<Indirizzo> indirizzi, string path)
     {
         using StreamWriter stream = File.CreateText(path); 
         foreach (var indirizzo in indirizzi)
             stream.WriteLine(indirizzo.ToString());
     }
-}
 
+
+    // BONUS POMERIDIANO
+
+    static void CreateBoard()
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                board[row, col] = ' ';
+            }
+        }
+    }
+
+    static void PrintBoard()
+    {
+        Console.WriteLine("| # | 1 | 2 | 3 |");
+        Console.WriteLine("-----------------");
+        for (int row = 0; row < 3; row++)
+        {
+            Console.Write($"{row + 1} | ");
+            for (int col = 0; col < 3; col++)
+            {
+                Console.Write(board[row, col] == ' ' ? " " : board[row, col].ToString());
+                if (col < 2)
+                {
+                    Console.WriteLine(" | ");
+                }
+            }
+            Console.WriteLine(" |");
+            if (row < 2)
+            {
+                Console.WriteLine("-----------------");
+            }
+        }
+    }
+
+    static bool IsBoardFull()
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            for (int col = 0; col < 3; col++)
+            {
+                if (board[row, col] == ' ')
+                {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    static void SwitchPlayer()
+    {
+        currentPlayer = currentPlayer == 'A' ? 'A' : 'B';
+    }
+
+    static void PlayerMove()
+    {
+        int row, col;
+
+        while (true)
+        {
+            Console.WriteLine($"Giocatore {currentPlayer} inserisci la tua mossa (ad esempio: 1-2)");
+            string input = Console.ReadLine();
+            string[] parts = input.Split('-');
+
+            if (parts.Length == 2 && int.TryParse(parts[0], out row) && int.TryParse(parts[1], out col))
+            {
+                row--;
+                col--;
+
+                if (row >= 0 && row < 3 && col >= 0 && col < 3 && board[row, col] == ' ')
+                {
+                    board[row, col] = currentPlayer;
+                    break;
+                }
+                else
+                {
+                    Console.WriteLine("Mossa non valida, prova di nuovo");
+                }
+            }
+            else
+            {
+                Console.WriteLine("Mossa non valida, prova di nuovo");
+            }
+        }
+    }
+
+    static bool CheckWin()
+    {
+        for (int row = 0; row < 3; row++)
+        {
+            if (board[row, 0] == currentPlayer && board[row, 1] == currentPlayer && board[row, 2] == currentPlayer)
+            {
+                return true;
+            }
+        }
+
+        for (int col = 0; col < 3; col++)
+        {
+            if (board[0, col] == currentPlayer && board[1, col] == currentPlayer && board[2, col] == currentPlayer)
+            {
+                return true;
+            }
+        }
+
+        if (board[0, 0] == currentPlayer && board[1, 1] == currentPlayer && board[2, 2] == currentPlayer)
+        {
+            return true;
+        }
+
+        if (board[0, 2] == currentPlayer && board[1, 1] == currentPlayer && board[2, 0] == currentPlayer)
+        {
+            return true;
+        }
+
+        return false;
+    }
