@@ -16,7 +16,7 @@ class Program
         string path = "/Users/mirko/boolean/DotNet/csharp-lista-indirizzi/addresses.csv";
         string path2 = "/Users/mirko/boolean/DotNet/csharp-lista-indirizzi/addresses2.csv";
         var indirizzi = LeggiDaTesto(path);
-        foreach(var indirizzo in indirizzi)
+        foreach (var indirizzo in indirizzi)
         {
             Console.WriteLine($"Ecco l'indirizzo {indirizzo}");
         }
@@ -102,7 +102,7 @@ class Program
 
     public static void ScriviInTesto(List<Indirizzo> indirizzi, string path)
     {
-        using StreamWriter stream = File.CreateText(path); 
+        using StreamWriter stream = File.CreateText(path);
         foreach (var indirizzo in indirizzi)
             stream.WriteLine(indirizzo.ToString());
     }
@@ -226,3 +226,4 @@ class Program
 
         return false;
     }
+}
