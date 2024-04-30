@@ -123,7 +123,7 @@ class Program
 
     static void PrintBoard()
     {
-        Console.WriteLine("| # | 1 | 2 | 3 |");
+        Console.WriteLine("# | 1 | 2 | 3 |");
         Console.WriteLine("-----------------");
         for (int row = 0; row < 3; row++)
         {
@@ -133,7 +133,7 @@ class Program
                 Console.Write(board[row, col] == ' ' ? " " : board[row, col].ToString());
                 if (col < 2)
                 {
-                    Console.WriteLine(" | ");
+                    Console.Write(" | ");
                 }
             }
             Console.WriteLine(" |");
@@ -161,7 +161,7 @@ class Program
 
     static void SwitchPlayer()
     {
-        currentPlayer = currentPlayer == 'A' ? 'A' : 'B';
+        currentPlayer = (currentPlayer == 'A') ? 'B' : 'A';
     }
 
     static void PlayerMove()
